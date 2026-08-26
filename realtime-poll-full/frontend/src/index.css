@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta: "control room" — carvão profundo com azul-petróleo, um único
+     verde-sinal reservado para estados "ao vivo" (ninguém mais usa esse
+     verde na UI, para que ele mantenha o significado de "live"). */
+  --color-bg: #12151B;
+  --color-surface: #1A1F27;
+  --color-surface-raised: #212733;
+  --color-border: #2A3140;
+  --color-border-strong: #3A4356;
+  --color-text: #E7EAF0;
+  --color-text-muted: #8891A3;
+  --color-text-faint: #5C6577;
+  --color-signal: #35D48C;
+  --color-signal-dim: #1F5C41;
+  --color-danger: #E5566B;
+
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(53, 212, 140, 0.05), transparent 40%),
+      radial-gradient(circle at 88% 92%, rgba(58, 67, 86, 0.15), transparent 45%);
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background-color: var(--color-signal-dim);
+    color: var(--color-text);
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 2px;
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+@keyframes bar-flash {
+  0% { filter: brightness(1.6); }
+  100% { filter: brightness(1); }
+}
+
+@keyframes count-pop {
+  0% { transform: translateY(-4px); opacity: 0.4; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+.animate-count-pop {
+  animation: count-pop 220ms ease-out;
+}
+
+.animate-bar-flash {
+  animation: bar-flash 500ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
