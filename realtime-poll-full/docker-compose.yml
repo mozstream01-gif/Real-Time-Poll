@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - CORS_ORIGIN=http://localhost:5173
+      - DATABASE_URL=sqlite:./database.sqlite
+    volumes:
+      - backend-data:/app
+    restart: unless-stopped
+
+volumes:
+  backend-data:
