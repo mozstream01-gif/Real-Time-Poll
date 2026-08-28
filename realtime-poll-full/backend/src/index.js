@@ -75,11 +75,11 @@ async function start() {
   } catch (err) {
     console.error("[ERROR] Falha ao iniciar o servidor:");
     if (err.name === "SequelizeConnectionRefusedError" || err.original?.code === "ECONNREFUSED") {
-      console.error("   -> Nao foi possivel ligar ao MySQL. O servico MySQL esta ativo na porta 3306?");
-      console.error("   -> Se o MySQL estiver noutra porta ou maquina, ajusta DATABASE_URL no ficheiro backend/.env.");
-    } else if (err.original?.code === "ER_ACCESS_DENIED_ERROR") {
+      console.error("   -> Nao foi possivel ligar ao PostgreSQL. O servico PostgreSQL esta ativo na porta 5432?");
+      console.error("   -> Se o PostgreSQL estiver noutra porta ou maquina, ajusta DATABASE_URL no ficheiro backend/.env.");
+    } else if (err.original?.code === "28P01" || err.original?.code === "ER_ACCESS_DENIED_ERROR") {
       console.error("   -> Acesso negado. Confirma o utilizador e a palavra-passe no DATABASE_URL (.env).");
-    } else if (err.original?.code === "ER_BAD_DB_ERROR") {
+    } else if (err.original?.code === "3D000" || err.original?.code === "ER_BAD_DB_ERROR") {
       console.error("   -> A base de dados nao existe. Cria-a com: CREATE DATABASE realtime_poll;");
     } else {
       console.error("   ->", err.message || err);

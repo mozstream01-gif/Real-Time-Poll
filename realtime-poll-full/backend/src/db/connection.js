@@ -1,29 +1,28 @@
 import { Sequelize } from "sequelize";
 import "dotenv/config";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const DATABASE_URL = process.env.DATABASE_URL;
 
-const DATABASE_URL = process.env.DATABASE_URL || "sqlite:./database.sqlite";
+if (!DATABASE_URL) {
+  throw new Error("DATABASE_URL não definida. Configura o ficheiro .env.");
+}
 
-const baseOptions = {
+const isProduction = process.env.NODE_ENV === "production";
+
+export const sequelize = new Sequelize(DATABASE_URL, {
+  dialect: "postgres",
   logging: process.env.SQL_LOGGING === "true" ? console.log : false,
   define: {
-    underscored: true, // colunas em snake_case (created_at, poll_id, etc.)
+    underscored: true,
   },
-};
+  dialectOptions: isProduction
+    ? {
+        ssl: {
+          require: true,
+          rejectUnauthorized: false, // necessário para o certificado gerido do Render
+        },
+      }
+    : {},
+});
 
-export const sequelize = DATABASE_URL.startsWith("sqlite:")
-  ? new Sequelize({
-      dialect: "sqlite",
-      storage: path.isAbsolute(DATABASE_URL.replace("sqlite:", ""))
-        ? DATABASE_URL.replace("sqlite:", "")
-        : path.resolve(__dirname, "../../", DATABASE_URL.replace("sqlite:", "") || "database.sqlite"),
-      ...baseOptions,
-    })
-  : new Sequelize(DATABASE_URL, {
-      dialect: "mysql",
-      ...baseOptions,
-    });
 

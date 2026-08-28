@@ -1,6 +1,19 @@
 version: '3.8'
 
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: poll-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: poll_pass
+      POSTGRES_DB: realtime_poll
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
   backend:
     build:
       context: ./backend
@@ -10,10 +23,11 @@ services:
     environment:
       - PORT=4000
       - CORS_ORIGIN=http://localhost:5173
-      - DATABASE_URL=sqlite:./database.sqlite
-    volumes:
-      - backend-data:/app
+      - DATABASE_URL=postgresql://postgres:poll_pass@postgres:5432/realtime_poll
+    depends_on:
+      - postgres
     restart: unless-stopped
 
 volumes:
-  backend-data:
+  pgdata:
+

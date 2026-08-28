@@ -39,10 +39,10 @@ if (isDirectExecution) {
     } catch (err) {
       console.error("[ERROR] Erro ao correr o seed:");
       if (err.name === "SequelizeConnectionRefusedError" || err.original?.code === "ECONNREFUSED") {
-        console.error("   -> Nao foi possivel ligar a base de dados na porta 3306. O servico esta ativo?");
-      } else if (err.original?.code === "ER_ACCESS_DENIED_ERROR") {
+        console.error("   -> Nao foi possivel ligar a base de dados na porta 5432. O servico esta ativo?");
+      } else if (err.original?.code === "28P01" || err.original?.code === "ER_ACCESS_DENIED_ERROR") {
         console.error("   -> Acesso negado. Confirma o utilizador e a palavra-passe no DATABASE_URL (.env).");
-      } else if (err.original?.code === "ER_BAD_DB_ERROR") {
+      } else if (err.original?.code === "3D000" || err.original?.code === "ER_BAD_DB_ERROR") {
         console.error("   -> A base de dados nao existe. Cria-a com: CREATE DATABASE realtime_poll;");
       } else {
         console.error("   ->", err.message || err);
