@@ -10,7 +10,7 @@ import { pollRouter } from "./routes/poll.routes.js";
 import { registerSocketHandlers } from "./sockets/index.js";
 
 const PORT = Number(process.env.PORT) || 4000;
-const CORS_ORIGIN_ENV = process.env.CORS_ORIGIN || "http://localhost:5173";
+const CORS_ORIGIN_ENV = process.env.CORS_ORIGIN || "https://real-time-poll-olive.vercel.app";
 //Chirla esta com sono
 // Suporte a multiplas origens separadas por virgula ou wildcard '*'
 const allowedOrigins = CORS_ORIGIN_ENV === "*"
@@ -25,7 +25,6 @@ const corsOptions = {
 
 const app = express();
 
-// Habilita trust proxy para deploy atras de reverse proxies (Render, Railway, Nginx, Vercel)
 app.set("trust proxy", 1);
 
 app.use(cors(corsOptions));
@@ -63,7 +62,6 @@ async function start() {
     await sequelize.sync();
     console.log("[INFO] Modelos sincronizados com o banco.");
 
-    // Auto-seed para deployments sem intervencao manual (Render, Railway, etc.)
     if (process.env.AUTO_SEED !== "false") {
       await seedDatabase({ silent: true });
     }
