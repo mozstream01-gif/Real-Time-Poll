@@ -11,7 +11,7 @@ import { registerSocketHandlers } from "./sockets/index.js";
 
 const PORT = Number(process.env.PORT) || 4000;
 const CORS_ORIGIN_ENV = process.env.CORS_ORIGIN || "http://localhost:5173";
-
+//Chirla esta com sono
 // Suporte a multiplas origens separadas por virgula ou wildcard '*'
 const allowedOrigins = CORS_ORIGIN_ENV === "*"
   ? "*"
